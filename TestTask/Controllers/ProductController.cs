@@ -7,10 +7,10 @@ namespace TestTask.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly TestTaskContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly decimal _vatRate;
 
-        public ProductController(TestTaskContext context, IConfiguration configuration)
+        public ProductController(ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
             _vatRate = configuration.GetValue<decimal>("VATRate");

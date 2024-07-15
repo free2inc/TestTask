@@ -10,7 +10,7 @@ using TestTask.Data;
 
 namespace TestTask.Migrations
 {
-    [DbContext(typeof(TestTaskContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class TestTaskContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

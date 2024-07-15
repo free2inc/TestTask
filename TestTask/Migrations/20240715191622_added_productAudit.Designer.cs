@@ -11,7 +11,7 @@ using TestTask.Data;
 
 namespace TestTask.Migrations
 {
-    [DbContext(typeof(TestTaskContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240715191622_added_productAudit")]
     partial class added_productAudit
     {

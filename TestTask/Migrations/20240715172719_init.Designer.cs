@@ -10,7 +10,7 @@ using TestTask.Data;
 
 namespace TestTask.Migrations
 {
-    [DbContext(typeof(TestTaskContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240715172719_init")]
     partial class init
     {

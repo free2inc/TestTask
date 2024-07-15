@@ -3,9 +3,9 @@ using TestTask.Models;
 
 namespace TestTask.Data
 {
-    public class TestTaskContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public TestTaskContext(DbContextOptions<TestTaskContext> options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
