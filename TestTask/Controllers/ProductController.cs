@@ -63,6 +63,7 @@ namespace TestTask.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(product);
+                await LogAuditTrail(null, product, ChangeType.Create);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -101,8 +102,14 @@ namespace TestTask.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    var oldProduct = await _context.Product
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(p => p.Id == product.Id);
+                    _context.Product.Update(product);
+                    await LogAuditTrail(oldProduct, product, ChangeType.Update);
                     await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -115,7 +122,6 @@ namespace TestTask.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(product);
         }
@@ -148,7 +154,7 @@ namespace TestTask.Controllers
             {
                 _context.Product.Remove(product);
             }
-
+            await LogAuditTrail(product, null, ChangeType.Delete);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -156,6 +162,34 @@ namespace TestTask.Controllers
         private bool ProductExists(int id)
         {
             return _context.Product.Any(e => e.Id == id);
+        }
+
+        private async ValueTask LogAuditTrail
+            (
+            Product oldProduct,
+            Product newProduct,
+            ChangeType changeType,
+            bool toSave = false)
+        {
+            var audit = new ProductAudit
+            {
+                ProductId = oldProduct?.Id ?? newProduct.Id,
+                OldTitle = oldProduct?.Title,
+                OldQuantity = oldProduct?.Quantity,
+                OldPrice = oldProduct?.Price,
+                NewTitle = newProduct?.Title,
+                NewQuantity = newProduct?.Quantity,
+                NewPrice = newProduct?.Price,
+                ChangedBy = "",
+                ChangeDate = DateTime.UtcNow,
+                ChangeType = changeType
+            };
+
+            _context.ProductAudit.Add(audit);
+            if (toSave)
+            {
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

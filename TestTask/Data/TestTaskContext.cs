@@ -10,7 +10,8 @@ namespace TestTask.Data
         {
         }
 
-        public DbSet<Product> Product { get; set; } = default!;
+        public DbSet<Product> Product { get; set; }
+        public DbSet<ProductAudit> ProductAudit { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

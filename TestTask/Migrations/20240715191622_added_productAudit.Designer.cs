@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestTask.Data;
 
@@ -11,9 +12,11 @@ using TestTask.Data;
 namespace TestTask.Migrations
 {
     [DbContext(typeof(TestTaskContext))]
-    partial class TestTaskContextModelSnapshot : ModelSnapshot
+    [Migration("20240715191622_added_productAudit")]
+    partial class added_productAudit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,13 +89,14 @@ namespace TestTask.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("NewPrice")
+                    b.Property<decimal>("NewPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("NewQuantity")
+                    b.Property<int>("NewQuantity")
                         .HasColumnType("int");
 
                     b.Property<string>("NewTitle")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("OldPrice")
