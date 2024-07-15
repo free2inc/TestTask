@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TestTask.Models.Product>
+﻿@model IEnumerable<ProductViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,6 +9,8 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -20,6 +22,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                Total Price With VAT
             </th>
             <th></th>
         </tr>
@@ -35,6 +40,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPriceWithVAT)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

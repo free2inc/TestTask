@@ -1,31 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TestTask.Data;
 using TestTask.Models;
 
 namespace TestTask.Controllers
 {
-    public class ProductsController : Controller
+    public class ProductController : Controller
     {
         private readonly TestTaskContext _context;
+        private readonly decimal _vatRate;
 
-        public ProductsController(TestTaskContext context)
+        public ProductController(TestTaskContext context, IConfiguration configuration)
         {
             _context = context;
+            _vatRate = configuration.GetValue<decimal>("VATRate");
         }
 
-        // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Product.ToListAsync());
+            var products = await _context.Product.ToListAsync();
+
+            var productViewModel = products.Select(p => new ProductViewModel
+            {
+                Id = p.Id,
+                Title = p.Title,
+                Price = p.Price,
+                Quantity = p.Quantity,
+                TotalPriceWithVAT = p.TotalPriceWithVAT(_vatRate)
+            });
+            return View(productViewModel);
         }
 
-        // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,7 +48,6 @@ namespace TestTask.Controllers
             return View(product);
         }
 
-        // GET: Products/Create
         public IActionResult Create()
         {
             return View();
